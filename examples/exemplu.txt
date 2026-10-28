@@ -1,0 +1,5 @@
+3
+# Fiecare linie este UN singur pas; "+" leaga miscarile aceluiasi pas.
+row 2 right x3 + col 3 up x2
+row 1-2 left
+col 1 down x2 + row 3 right

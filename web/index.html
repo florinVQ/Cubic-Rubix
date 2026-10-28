@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cubix · Simulator Rubik</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body data-busy="false">
+  <div class="app">
+    <section class="stage" aria-label="Cubul Rubik 3D">
+      <header class="brand">
+        <h1>Cubix</h1>
+        <p>Simulator Rubik</p>
+      </header>
+
+      <div class="viewport" id="viewport">
+        <div class="floor-shadow" aria-hidden="true"></div>
+        <div class="rig" id="rig">
+          <div class="cube" id="cube"></div>
+          <div class="handles" id="handles"></div>
+        </div>
+      </div>
+
+      <div class="hud" id="hud" role="status" aria-live="polite">
+        <div class="hud-title">
+          <span class="hud-number" id="hud-number">Gata</span>
+          <span class="hud-tag" id="hud-tag" hidden></span>
+        </div>
+        <p class="hud-label" id="hud-label">Apasă o săgeată de pe cub ca să rotești un strat.</p>
+        <p class="hud-sub" id="hud-sub"></p>
+        <div class="hud-progress" aria-hidden="true"><i id="hud-progress"></i></div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <section class="card">
+        <header class="card-head">
+          <h2>Cub desfășurat</h2>
+          <span class="pill" id="net-step">Stare inițială</span>
+        </header>
+        <div class="net" id="net" aria-label="Cubul desfășurat, cu culori"></div>
+        <div class="matrix-log" id="matrix-log" hidden></div>
+      </section>
+
+      <section class="card controls">
+        <div class="field">
+          <span class="field-label" id="size-label">Dimensiune</span>
+          <div class="segmented" id="size-picker" role="radiogroup" aria-labelledby="size-label"></div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="speed">Viteza de rotire (V)</label>
+          <div class="speed">
+            <input type="range" id="speed-range" min="30" max="720" step="10" value="180" aria-label="Viteza de rotire">
+            <input type="number" id="speed" min="30" max="720" step="10" value="180">
+            <span class="unit">°/s</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-label" id="width-label">Straturi rotite odată</span>
+          <div class="segmented" id="width-picker" role="radiogroup" aria-labelledby="width-label">
+            <button type="button" role="radio" aria-checked="true" data-width="1">1</button>
+            <button type="button" role="radio" aria-checked="false" data-width="2">2</button>
+          </div>
+        </div>
+
+        <div class="field inline">
+          <span class="field-label" id="compose-label">Pas compus</span>
+          <button type="button" class="switch" id="compose-toggle" role="switch" aria-checked="false" aria-labelledby="compose-label"></button>
+        </div>
+
+        <div class="composer" id="composer" hidden>
+          <ul class="chips" id="pending" aria-label="Mișcări în pasul curent"></ul>
+          <p class="hint" id="pending-hint">Apasă săgețile de pe cub. Mai multe apăsări pe aceeași săgeată cresc numărul de rotiri.</p>
+          <div class="row">
+            <button type="button" class="btn primary" id="apply-step" data-lock disabled>Aplică ca un singur pas</button>
+            <button type="button" class="btn" id="clear-pending" disabled>Golește</button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="action" id="matrix-toggle" aria-pressed="false">
+            <span>Cum se interschimbă matricial fiecare pas</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg>
+          </button>
+          <div class="action split">
+            <span>Export fișier, fiecare pas desfășurat</span>
+            <span class="links">
+              <a class="btn small" href="/api/export?format=html" download="MatriceDesfasurata.html">Culori .html</a>
+              <a class="btn small" href="/api/export?format=txt" download="MatriceDesfasurata.txt">Text .txt</a>
+            </span>
+          </div>
+          <button type="button" class="action" id="solve" data-lock>
+            <span>Auto-resolve cub</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+          </button>
+        </div>
+
+        <div class="row utilities">
+          <button type="button" class="btn" id="scramble" data-lock>Amestecă</button>
+          <button type="button" class="btn" id="pause" aria-pressed="false">Pauză</button>
+          <button type="button" class="btn" id="reset" data-lock>Resetează</button>
+        </div>
+      </section>
+
+      <section class="card history-card">
+        <header class="card-head">
+          <h2>Pași</h2>
+          <span class="pill" id="history-count">0</span>
+        </header>
+        <ol class="history" id="history"></ol>
+        <p class="empty" id="history-empty">Niciun pas încă. O operație compusă, de exemplu 3 rotiri la dreapta și 2 în sus, se numără ca un singur pas.</p>
+      </section>
+    </aside>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="assertive" hidden></div>
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>
